@@ -7,9 +7,9 @@ import { Menu } from '@headlessui/react';
 import { BellIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', current: true },
-  { name: 'Team', href: '/team', current: false },
-  { name: 'Projects', href: '/projects', current: false },
+  { name: 'Home', href: '/', current: true },
+  { name: 'Forums', href: '/forums', current: false },
+  { name: 'UserChat', href: '/chat', current: false },
   { name: 'Calendar', href: '/calendar', current: false },
 ];
 

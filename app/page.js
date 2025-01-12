@@ -14,11 +14,11 @@ export default function HomePage() {
 
         {/* Main Content */}
         <div className="relative pt-20 pb-24 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-center mt-12">
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl mb-6">
               Welcome to{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                ChattyHub
+                ChatterHub
               </span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300 max-w-2xl mx-auto">
