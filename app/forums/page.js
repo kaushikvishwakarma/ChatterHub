@@ -45,10 +45,10 @@ export const topics = [
 
 const Forums = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+    <div className="min-h-screen mt-0 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       <div className="container mx-auto py-20 px-6">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-4xl font-bold tracking-tight text-white mb-4">
             Discussion{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">

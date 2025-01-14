@@ -15,8 +15,7 @@ const navigation = [
 
 const Navbar = () => {
   const pathname = usePathname();
-  const user = useUser();
-  // console.log(user.user?.id);
+  
   return (
     <nav className="bg-gray-900/80 backdrop-blur-lg border-b border-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
