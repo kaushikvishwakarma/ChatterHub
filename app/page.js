@@ -27,7 +27,7 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
-                href="/signup"
+                href="/forums"
                 className="rounded-full px-8 py-3 text-base font-semibold text-white shadow-sm 
                          bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 
                          hover:to-blue-600 transition-all duration-200 hover:scale-105"

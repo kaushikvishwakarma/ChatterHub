@@ -2,43 +2,44 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const topics = [
+//added export here so that i can
+export const topics = [
     {
         text: "Python",
         img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
         desc: "Let's discuss about Python here...",
-        url:"python-discuss"
+        url:"python"
 
     },
     {
         text: "JavaScript",
         img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
         desc: "Explore the world of JavaScript and modern web development.",
-        url:"js-discuss"
+        url:"JS"
     },
     {
         text: "C++",
         img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
         desc: "Dive deep into C++ programming concepts and advanced techniques.",
-        url:"cpp-discuss"
+        url:"Cpp"
     },
     {
         text: "Blender",
         img: "https://download.blender.org/branding/community/blender_community_badge_white.svg",
         desc: "Discuss 3D modeling, rendering, and animation in Blender.",
-        url:"blender-discuss"
+        url:"Blender"
     },
     {
         text: "Unreal Engine",
         img: "https://raw.githubusercontent.com/kenangundogan/fontisto/036b7eca71aab1bef8e6a0518f7329f13ed62f6b/icons/svg/brand/unreal-engine.svg",
         desc: "Learn about game development and Blueprints in Unreal Engine.",
-        url:"unrealengine-discuss"
+        url:"UnrealEngine"
     },
     {
         text: "Git",
         img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg", // Using git icon as placeholder
         desc: "Understand and implement fundamental of Git for efficient coding.",
-        url:"git-discuss"
+        url:"git "
     }
 ];
 

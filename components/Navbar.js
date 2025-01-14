@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
-
+import { useUser } from '@clerk/nextjs';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Forums', href: '/forums' },
@@ -15,7 +15,8 @@ const navigation = [
 
 const Navbar = () => {
   const pathname = usePathname();
-
+  const user = useUser();
+  // console.log(user.user?.id);
   return (
     <nav className="bg-gray-900/80 backdrop-blur-lg border-b border-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
