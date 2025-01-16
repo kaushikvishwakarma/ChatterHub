@@ -39,7 +39,7 @@ export default function about() {
                 <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all group-hover:w-full"></div>
               </a>
               <a
-                href="https://github.com/chatterhub"
+                href="https://github.com/kaushikvishwakarma"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative inline-flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white transition-colors"
