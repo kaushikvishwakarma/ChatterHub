@@ -10,7 +10,7 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Forums', href: '/forums' },
   { name: 'UserChat', href: '/chat' },
-  { name: 'Calendar', href: '/calendar' },
+  { name: 'About Us', href: '/about' },
 ];
 
 const Navbar = () => {
