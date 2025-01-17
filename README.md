@@ -1,4 +1,4 @@
-<img width="1280" alt="image" src="https://github.com/user-attachments/assets/de2e31be-bd79-4736-bfcc-fbad577ae246" /># ChatterHub
+# ChatterHub
 
 This is a **web-based chat application** built using:
 
@@ -95,7 +95,16 @@ chatterhub/
 
 ## Screenshots
 
-*Add screenshots of your application here to showcase its UI and features.*
+<img width="1280" alt="image" src="https://github.com/user-attachments/assets/a4c73f9c-9909-4b87-a16d-f6ab6f057b97" />
+
+![image](https://github.com/user-attachments/assets/b8498b01-e8fc-462f-9181-04171f7869a2)
+
+![image](https://github.com/user-attachments/assets/b6ed2257-485b-401d-94a0-6aae0c28851d)
+
+![image](https://github.com/user-attachments/assets/52832abb-18e4-47cb-a480-9ce0315fd935)
+
+![image](https://github.com/user-attachments/assets/8e004914-c980-4ffc-afd7-318d5dc267e6)
+
 
 ## Contributions
 
@@ -141,14 +150,5 @@ For any inquiries or support, please contact:
 - **GitHub**: Kaushikvishwakarma
 
 
-here are the project Screenshots
-<img width="1280" alt="image" src="https://github.com/user-attachments/assets/a4c73f9c-9909-4b87-a16d-f6ab6f057b97" />
 
-![image](https://github.com/user-attachments/assets/b8498b01-e8fc-462f-9181-04171f7869a2)
-
-![image](https://github.com/user-attachments/assets/b6ed2257-485b-401d-94a0-6aae0c28851d)
-
-![image](https://github.com/user-attachments/assets/52832abb-18e4-47cb-a480-9ce0315fd935)
-
-![image](https://github.com/user-attachments/assets/8e004914-c980-4ffc-afd7-318d5dc267e6)
 
