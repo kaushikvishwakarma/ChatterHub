@@ -49,7 +49,7 @@ export default function HomePage() {
                          hover:to-blue-600 transition-all duration-200 hover:scale-105"
               >
                 <span className="flex items-center gap-2">
-                  Get Started
+                  Sign In/Out
                   <Zap className="w-4 h-4 animate-pulse" />
                 </span>
               </a>
