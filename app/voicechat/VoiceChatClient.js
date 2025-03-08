@@ -4,51 +4,9 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { Mic, Radio, Sparkles, Volume2, Music, WifiOff, Timer, Share2, Video, X, Users, RefreshCw, Camera, CameraOff, MicOff } from 'lucide-react';
 
-// Simulate an online users pool
-const onlineUsers = {
-  users: [],
-  waitingUsers: [],
-  
-  addUser(userId, userName) {
-    if (!this.users.find(u => u.id === userId)) {
-      this.users.push({ id: userId, name: userName, isWaiting: false });
-    }
-  },
-  
-  addToWaitingList(userId) {
-    const user = this.users.find(u => u.id === userId);
-    if (user) {
-      user.isWaiting = true;
-      this.waitingUsers.push(user);
-    }
-  },
-  
-  removeFromWaitingList(userId) {
-    const index = this.waitingUsers.findIndex(u => u.id === userId);
-    if (index !== -1) {
-      this.waitingUsers.splice(index, 1);
-    }
-    
-    const user = this.users.find(u => u.id === userId);
-    if (user) {
-      user.isWaiting = false;
-    }
-  },
-  
-  findMatch(userId) {
-    // Find another waiting user that isn't the current user
-    const match = this.waitingUsers.find(u => u.id !== userId);
-    if (match) {
-      this.removeFromWaitingList(match.id);
-      return match;
-    }
-    return null;
-  },
-  
-  getWaitingCount() {
-    return this.waitingUsers.length;
-  }
-};
+// Create a global user pool for matching
+// In a real app, this would be handled by a server
+let globalWaitingUsers = [];
 
 export default function VoiceChatClient() {
   const { user, isLoaded, isSignedIn } = useUser();
@@ -59,25 +17,35 @@ export default function VoiceChatClient() {
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
   const [cameraError, setCameraError] = useState(null);
-  const searchTimeoutRef = useRef(null);
+  const [onlineCount, setOnlineCount] = useState(0);
+  const searchIntervalRef = useRef(null);
   const waitingIntervalRef = useRef(null);
   const videoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const streamRef = useRef(null);
   
-  // Add user to online users when component mounts
+  // Simulate online users count
   useEffect(() => {
-    if (isSignedIn && user) {
-      onlineUsers.addUser(user.id, user.firstName || 'Anonymous');
-    }
-  }, [isSignedIn, user]);
+    // Start with a random number between 5-15
+    setOnlineCount(Math.floor(Math.random() * 10) + 5);
+    
+    // Update randomly every 10 seconds
+    const interval = setInterval(() => {
+      setOnlineCount(prev => {
+        const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+        return Math.max(3, prev + change);
+      });
+    }, 10000);
+    
+    return () => clearInterval(interval);
+  }, []);
   
   // Clean up when component unmounts
   useEffect(() => {
     return () => {
-      // Clear any pending timeouts and intervals
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
+      // Clear any pending intervals
+      if (searchIntervalRef.current) {
+        clearInterval(searchIntervalRef.current);
       }
       if (waitingIntervalRef.current) {
         clearInterval(waitingIntervalRef.current);
@@ -90,10 +58,52 @@ export default function VoiceChatClient() {
       
       // Remove user from waiting list
       if (isSignedIn && user) {
-        onlineUsers.removeFromWaitingList(user.id);
+        removeFromWaitingList(user.id);
       }
     };
   }, [isSignedIn, user]);
+  
+  // Add user to waiting list
+  const addToWaitingList = useCallback((userId, userName) => {
+    // Check if user is already in the waiting list
+    if (!globalWaitingUsers.find(u => u.id === userId)) {
+      console.log(`Adding user ${userId} to waiting list`);
+      globalWaitingUsers.push({ 
+        id: userId, 
+        name: userName,
+        joinedAt: Date.now()
+      });
+      console.log('Current waiting list:', globalWaitingUsers);
+    }
+  }, []);
+  
+  // Remove user from waiting list
+  const removeFromWaitingList = useCallback((userId) => {
+    console.log(`Removing user ${userId} from waiting list`);
+    globalWaitingUsers = globalWaitingUsers.filter(u => u.id !== userId);
+    console.log('Updated waiting list:', globalWaitingUsers);
+  }, []);
+  
+  // Find a match for the current user
+  const findMatch = useCallback((userId) => {
+    // Find another waiting user that isn't the current user
+    const otherUsers = globalWaitingUsers.filter(u => u.id !== userId);
+    console.log(`Looking for match for ${userId}. Available users:`, otherUsers);
+    
+    if (otherUsers.length > 0) {
+      // Get the user who has been waiting the longest
+      const match = otherUsers.sort((a, b) => a.joinedAt - b.joinedAt)[0];
+      console.log(`Found match: ${match.id}`);
+      
+      // Remove the matched user from the waiting list
+      removeFromWaitingList(match.id);
+      
+      return match;
+    }
+    
+    console.log('No match found');
+    return null;
+  }, [removeFromWaitingList]);
   
   // Initialize camera
   const initCamera = useCallback(async () => {
@@ -127,20 +137,8 @@ export default function VoiceChatClient() {
           console.log('Video metadata loaded');
           videoRef.current.play().catch(e => console.error('Error playing video:', e));
         };
-        
-        // Debug: Log any errors
-        videoRef.current.onerror = (e) => {
-          console.error('Video element error:', e);
-        };
       } else {
         console.error('Video ref is not available');
-      }
-      
-      // Simulate a remote video for demo purposes
-      if (remoteVideoRef.current) {
-        // In a real app, this would be the other user's stream
-        // For demo, we'll just show a placeholder
-        remoteVideoRef.current.poster = "https://via.placeholder.com/640x480.png?text=Remote+User";
       }
       
       return true;
@@ -198,7 +196,7 @@ export default function VoiceChatClient() {
       console.log('Camera initialized successfully');
       
       // Add user to waiting list
-      onlineUsers.addToWaitingList(user.id);
+      addToWaitingList(user.id, user.firstName || 'Anonymous');
       
       // Start waiting time counter
       waitingIntervalRef.current = setInterval(() => {
@@ -206,22 +204,23 @@ export default function VoiceChatClient() {
       }, 1000);
       
       // Try to find a match immediately
-      const match = onlineUsers.findMatch(user.id);
+      const match = findMatch(user.id);
       
       if (match) {
         // Found a match!
         handleMatchFound(match);
       } else {
         // No match found yet, start checking periodically
-        searchTimeoutRef.current = setInterval(() => {
-          const newMatch = onlineUsers.findMatch(user.id);
+        searchIntervalRef.current = setInterval(() => {
+          const newMatch = findMatch(user.id);
           if (newMatch) {
-            clearInterval(searchTimeoutRef.current);
+            clearInterval(searchIntervalRef.current);
             handleMatchFound(newMatch);
           }
         }, 2000);
         
-        // For demo purposes, simulate finding a match after 5 seconds
+        // For demo purposes, simulate finding a match after a random time between 5-15 seconds
+        const randomWaitTime = Math.floor(Math.random() * 10000) + 5000;
         setTimeout(() => {
           if (isSearching) {
             const simulatedMatch = {
@@ -230,7 +229,7 @@ export default function VoiceChatClient() {
             };
             handleMatchFound(simulatedMatch);
           }
-        }, 5000);
+        }, randomWaitTime);
       }
     } catch (error) {
       console.error('Error starting random call:', error);
@@ -239,7 +238,7 @@ export default function VoiceChatClient() {
       
       // Remove user from waiting list
       if (user) {
-        onlineUsers.removeFromWaitingList(user.id);
+        removeFromWaitingList(user.id);
       }
       
       // Clear waiting interval
@@ -247,7 +246,7 @@ export default function VoiceChatClient() {
         clearInterval(waitingIntervalRef.current);
       }
     }
-  }, [isSignedIn, user, initCamera, cameraError]);
+  }, [isSignedIn, user, initCamera, cameraError, addToWaitingList, findMatch, removeFromWaitingList]);
   
   // Handle when a match is found
   const handleMatchFound = useCallback((match) => {
@@ -256,16 +255,24 @@ export default function VoiceChatClient() {
       clearInterval(waitingIntervalRef.current);
     }
     
+    // Clear search interval
+    if (searchIntervalRef.current) {
+      clearInterval(searchIntervalRef.current);
+    }
+    
     // Remove user from waiting list
     if (user) {
-      onlineUsers.removeFromWaitingList(user.id);
+      removeFromWaitingList(user.id);
     }
     
     setMatchedUser(match);
     setIsCallActive(true);
     setIsSearching(false);
-    alert(`Connected with ${match.name}`);
-  }, [user]);
+    console.log(`Connected with ${match.name}`);
+    
+    // Update online count to reflect the match
+    setOnlineCount(prev => Math.max(3, prev - 1));
+  }, [user, removeFromWaitingList]);
   
   // Find next random user
   const findNextUser = useCallback(() => {
@@ -288,7 +295,9 @@ export default function VoiceChatClient() {
     
     setIsCallActive(false);
     setMatchedUser(null);
-    alert('Call ended');
+    
+    // Update online count to reflect the user becoming available again
+    setOnlineCount(prev => prev + 1);
   }, []);
   
   // Format waiting time
@@ -338,6 +347,12 @@ export default function VoiceChatClient() {
                 Connect with random users for spontaneous video conversations. 
                 Meet new people and make connections in our secure video chat environment.
               </p>
+              
+              {/* Online Users Count */}
+              <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800/50 border border-gray-700">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-gray-300">{onlineCount} users online</span>
+              </div>
 
               {/* Start Random Call Button */}
               <div className="mt-12 flex items-center justify-center">
@@ -368,10 +383,15 @@ export default function VoiceChatClient() {
                 <h2 className="text-2xl font-bold text-white mb-2">Finding a Match</h2>
                 <p className="text-gray-300 mb-4">Waiting for another user to connect with you...</p>
                 
-                <div className="flex items-center justify-center mb-6">
+                <div className="flex items-center justify-center gap-4 mb-6">
                   <div className="px-4 py-2 bg-gray-700 rounded-lg">
                     <span className="text-gray-300">Waiting time: </span>
                     <span className="text-purple-400 font-mono">{formatWaitingTime(waitingTime)}</span>
+                  </div>
+                  
+                  <div className="px-4 py-2 bg-gray-700 rounded-lg">
+                    <span className="text-gray-300">Users online: </span>
+                    <span className="text-purple-400 font-mono">{onlineCount}</span>
                   </div>
                 </div>
                 
@@ -401,13 +421,13 @@ export default function VoiceChatClient() {
                 <button
                   onClick={() => {
                     if (user) {
-                      onlineUsers.removeFromWaitingList(user.id);
+                      removeFromWaitingList(user.id);
                     }
                     if (waitingIntervalRef.current) {
                       clearInterval(waitingIntervalRef.current);
                     }
-                    if (searchTimeoutRef.current) {
-                      clearInterval(searchTimeoutRef.current);
+                    if (searchIntervalRef.current) {
+                      clearInterval(searchIntervalRef.current);
                     }
                     if (streamRef.current) {
                       streamRef.current.getTracks().forEach(track => track.stop());
@@ -435,6 +455,7 @@ export default function VoiceChatClient() {
                     playsInline
                     className="w-full h-full object-cover"
                     style={{ minHeight: '240px' }}
+                    poster="https://via.placeholder.com/640x480.png?text=Remote+User"
                   />
                   <div className="absolute bottom-4 left-4 bg-gray-900/80 px-3 py-1 rounded-lg">
                     <p className="text-white">{matchedUser?.name || 'Remote User'}</p>
