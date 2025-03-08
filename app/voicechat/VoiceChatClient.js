@@ -272,6 +272,13 @@ export default function VoiceChatClient() {
     
     // Update online count to reflect the match
     setOnlineCount(prev => Math.max(3, prev - 1));
+    
+    // In a real implementation, we would establish a WebRTC connection here
+    // For now, we'll just simulate a remote video
+    if (remoteVideoRef.current) {
+      // Set a placeholder image for the remote video
+      remoteVideoRef.current.poster = "https://via.placeholder.com/640x480.png?text=Remote+User";
+    }
   }, [user, removeFromWaitingList]);
   
   // Find next random user

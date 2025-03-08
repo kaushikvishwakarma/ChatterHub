@@ -1,8 +1,8 @@
 import VoiceChatClient from './VoiceChatClient';
 
 export const metadata = {
-  title: "Voice Chat - Coming Soon | ChatterHub",
-  description: "Experience the future of communication with ChatterHub's upcoming voice chat feature."
+  title: "Random Video Chat | ChatterHub",
+  description: "Connect with random users for spontaneous video conversations on ChatterHub."
 };
 
 export default function VoiceChatPage() {
