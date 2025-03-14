@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
+import { StreamChat } from 'stream-chat';
 
 export async function GET() {
   try {
@@ -12,9 +13,15 @@ export async function GET() {
       );
     }
     
-    // In a real implementation, you would use the Stream SDK to generate a token
-    // For now, we'll return the analytics token from the environment variables
-    const token = process.env.NEXT_PUBLIC_ANALYTICS_TOKEN;
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    const apiSecret = process.env.NEXT_PUBLIC_SECRET_KEY;
+    
+    if (!apiKey || !apiSecret) {
+      throw new Error('Stream API credentials not configured');
+    }
+    
+    const client = StreamChat.getInstance(apiKey, apiSecret);
+    const token = client.createToken(userId);
     
     return NextResponse.json({ token });
   } catch (error) {

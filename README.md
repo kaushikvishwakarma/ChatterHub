@@ -1,84 +1,78 @@
-# ChatterHub
+# ChatterHub - Random Video Chat
 
-This is a **web-based chat application** built using:
-
-- **Next.js** for the frontend and backend.
-- **Clerk** for user authentication and authorization.
-- **GetStream** for chat channels and real-time messaging functionality.
+A Next.js application that enables random video chat between users using Stream's Video SDK.
 
 ## Features
 
-- **User Authentication**: Secure login and signup functionality using Clerk.
-- **Real-time Messaging**: Leveraging GetStream's API for dynamic and real-time chat experiences.
-- **Chat Channels**: Create and join chat rooms seamlessly.
-- **Responsive Design**: Fully optimized for desktop and mobile devices.
+- Random video chat matching
+- Real-time video and audio communication
+- User authentication with Clerk
+- Modern UI with Tailwind CSS
+- Responsive design
 
-## Tech Stack
+## Prerequisites
 
-- **Framework**: Next.js
-- **Authentication**: Clerk
-- **Real-time Messaging**: GetStream
-- **Styling**: CSS/Styled Components/TailwindCSS (choose the one applicable)
-- **Deployment**: Vercel (or the platform you used)
-
-## Getting Started
-
-### Prerequisites
-
-Make sure you have the following installed:
-
-- Node.js (version 16 or later)
+- Node.js 18 or later
 - npm or yarn
-- A Clerk account
-- A GetStream account
+- A Stream account with API credentials
+- A Clerk account for authentication
 
-### Installation
+## Environment Variables
 
-1. Clone the repository:
+Create a `.env` file in the root directory with the following variables:
 
-   ```bash
-   git clone https://github.com/yourusername/chatterhub.git
-   cd chatterhub
-   ```
+```env
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
 
-2. Install dependencies:
+# Stream Video API
+NEXT_PUBLIC_API_KEY=your_stream_api_key
+NEXT_PUBLIC_SECRET_KEY=your_stream_secret_key
+NEXT_PUBLIC_ANALYTICS_TOKEN=your_stream_analytics_token
+```
 
+## Local Development
+
+1. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-3. Set up environment variables:
-
-   Create a `.env.local` file in the root of your project and add the following variables:
-
-   ```env
-   NEXT_PUBLIC_CLERK_FRONTEND_API=your_clerk_frontend_api_key
-   CLERK_API_KEY=your_clerk_api_key
-   GETSTREAM_API_KEY=your_getstream_api_key
-   GETSTREAM_API_SECRET=your_getstream_api_secret
-   NEXT_PUBLIC_GETSTREAM_APP_ID=your_getstream_app_id
-   ```
-
-4. Run the development server:
-
+2. Run the development server:
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
-   Open [http://localhost:3000](http://localhost:3000) in your browser to see the app.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Deployment
+## Deployment to Vercel
 
-The app can be easily deployed to Vercel or any hosting platform that supports Next.js. For Vercel:
+1. Push your code to a GitHub repository.
 
-1. Push your code to GitHub.
-2. Connect your GitHub repository to Vercel.
-3. Add your environment variables in the Vercel dashboard.
-4. Deploy the app.
+2. Go to [Vercel](https://vercel.com) and create a new project.
+
+3. Import your GitHub repository.
+
+4. Add the following environment variables in your Vercel project settings:
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+   - `CLERK_SECRET_KEY`
+   - `NEXT_PUBLIC_API_KEY`
+   - `NEXT_PUBLIC_SECRET_KEY`
+   - `NEXT_PUBLIC_ANALYTICS_TOKEN`
+
+5. Deploy your project.
+
+## Security Considerations
+
+- Never commit your `.env` file to version control
+- Keep your API keys and secrets secure
+- Use environment variables for all sensitive information
+- Regularly rotate your API keys and secrets
+
+## License
+
+MIT
 
 ## Project Structure
 
@@ -105,7 +99,6 @@ chatterhub/
 
 ![image](https://github.com/user-attachments/assets/8e004914-c980-4ffc-afd7-318d5dc267e6)
 
-
 ## Contributions
 
 Feel free to contribute to this project. Here are the steps:
@@ -131,10 +124,6 @@ Feel free to contribute to this project. Here are the steps:
    ```
 
 5. Open a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Acknowledgments
 
